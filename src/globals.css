@@ -1,2 +1,247 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
 @import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* ─────────────────────────────
+     Typography
+     ───────────────────────────── */
+
+  --font-display: "Newsreader", Georgia, serif;
+  --font-sans: "Public Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  /* ─────────────────────────────
+     Palette
+     ───────────────────────────── */
+
+  --color-ink-950: #24231f;
+  --color-ink-900: #292822;
+  --color-ink-800: #302f29;
+  --color-ink-700: #3a3931;
+  --color-ink-600: #45443b;
+  --color-ink-500: #5a584d;
+  --color-ink-400: #777267;
+  --color-ink-300: #9b9588;
+  --color-ink-200: #c5bfb2;
+  --color-ink-100: #e5e0d5;
+  --color-ink-50: #f3f0e8;
+
+  --color-paper-50: #faf9f5;
+  --color-paper-100: #f2efe7;
+  --color-paper-200: #e8e3d8;
+
+  --color-coral-500: #b95143;
+  --color-coral-400: #c75c4d;
+  --color-coral-300: #d36b5c;
+
+  /* ─────────────────────────────
+     Semantic colors
+     ───────────────────────────── */
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-heading: var(--heading);
+
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-surface-hover: var(--surface-hover);
+
+  --color-border: var(--border);
+  --color-border-subtle: var(--border-subtle);
+
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+
+  /* ─────────────────────────────
+     Shape
+     ───────────────────────────── */
+
+  --radius-sm: 4px;
+  --radius-md: 7px;
+  --radius-lg: 9px;
+  --radius-xl: 12px;
+
+  /* ─────────────────────────────
+     Shadows
+     ───────────────────────────── */
+
+  --shadow-card:
+    0 1px 2px rgb(40 35 25 / 0.06),
+    0 4px 14px rgb(40 35 25 / 0.04);
+
+  --shadow-popover:
+    0 8px 30px rgb(40 35 25 / 0.12);
+}
+
+/* ─────────────────────────────────
+   LIGHT MODE — DEFAULT
+   ───────────────────────────────── */
+
+:root {
+  color-scheme: light;
+
+  --background: #f2efe7;
+
+  /* Text hierarchy */
+  --foreground: #4a4841;
+  --heading: #292822;
+
+  --surface: #faf9f5;
+  --surface-raised: #f7f4ed;
+  --surface-hover: #ebe7dd;
+
+  --border: #d4cec1;
+  --border-subtle: #e2ddd3;
+
+  --muted: #716c62;
+  --muted-foreground: #918b80;
+
+  --accent: #b95143;
+  --accent-foreground: #fffaf6;
+}
+
+/* ─────────────────────────────────
+   DARK MODE — EXTENSION
+   ───────────────────────────────── */
+
+.dark {
+  color-scheme: dark;
+
+  --background: #292822;
+
+  /* Text hierarchy */
+  --foreground: #d5d1c6;
+  --heading: #f2eee4;
+
+  --surface: #24231f;
+  --surface-raised: #2c2b25;
+  --surface-hover: #333229;
+
+  --border: #45443b;
+  --border-subtle: #39382f;
+
+  --muted: #9b9588;
+  --muted-foreground: #777267;
+
+  --accent: #d36b5c;
+  --accent-foreground: #fff9f3;
+
+  --shadow-card:
+    0 1px 2px rgb(0 0 0 / 0.14),
+    0 4px 14px rgb(0 0 0 / 0.08);
+
+  --shadow-popover:
+    0 8px 30px rgb(0 0 0 / 0.18);
+}
+
+/* ─────────────────────────────────
+   GLOBAL DEFAULTS
+   ───────────────────────────────── */
+
+@layer base {
+  html {
+    @apply bg-background text-foreground;
+  }
+
+  body {
+    @apply min-h-screen bg-background text-foreground font-sans antialiased;
+  }
+
+  /* Editorial headings */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-display text-heading;
+  }
+
+  /* Body copy */
+  p {
+    @apply text-foreground;
+  }
+
+  /* Links */
+  a {
+    @apply text-foreground;
+  }
+
+  a:hover {
+    @apply text-accent;
+  }
+
+  /* Form controls */
+  button,
+  input,
+  textarea,
+  select {
+    @apply font-sans;
+  }
+
+  input,
+  textarea,
+  select {
+    @apply border border-border bg-surface text-foreground;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    @apply text-muted-foreground;
+  }
+
+  /* Dividers */
+  hr {
+    @apply border-0 border-t border-border-subtle;
+  }
+
+  /* Text selection */
+  ::selection {
+    @apply bg-accent text-accent-foreground;
+  }
+}
+
+/* ─────────────────────────────────
+   METADATA
+   ───────────────────────────────── */
+
+@utility metadata {
+  @apply font-mono text-sm uppercase tracking-[0.08em] text-muted;
+}
+
+/* ─────────────────────────────────
+   EDITORIAL IMAGE TREATMENT
+   ───────────────────────────────── */
+
+@utility editorial-stripes {
+  background-color: #e4dfd4;
+
+  background-image:
+    repeating-linear-gradient(
+      135deg,
+      transparent 0,
+      transparent 8px,
+      rgb(0 0 0 / 0.025) 8px,
+      rgb(0 0 0 / 0.025) 12px
+    );
+}
+
+.dark .editorial-stripes {
+  background-color: #35342c;
+
+  background-image:
+    repeating-linear-gradient(
+      135deg,
+      transparent 0,
+      transparent 8px,
+      rgb(255 255 255 / 0.025) 8px,
+      rgb(255 255 255 / 0.025) 12px
+    );
+}
 
