@@ -1,0 +1,61 @@
+name: 📄 Page request
+description: Request a new page for the website.
+title: "[Page]: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: page
+    attributes:
+      label: What page would you like to add?
+      description: Describe the page and where it should live within the site.
+      placeholder: A dedicated page for each project, accessible from the projects listing.
+    validations:
+      required: true
+
+  - type: textarea
+    id: purpose
+    attributes:
+      label: What is the purpose of this page?
+      description: Explain what the page should help users accomplish or understand.
+      placeholder: This page would provide more detailed information about each project, including its purpose, technologies, and links.
+    validations:
+      required: true
+
+  - type: textarea
+    id: content
+    attributes:
+      label: What content should it include?
+      description: List or describe the main sections, information, or components the page should contain.
+      placeholder: |
+        - Project title and description
+        - Technologies used
+        - Screenshots
+        - Links to the live site and repository
+    validations:
+      required: true
+
+  - type: textarea
+    id: design
+    attributes:
+      label: Design / layout
+      description: Describe how you'd like the page to look or behave. Include mockups or references if available.
+      placeholder: The page should follow the existing site design and use the same typography, spacing, and navigation.
+    validations:
+      required: false
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Could this be handled by an existing page or another approach?
+    validations:
+      required: false
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Additional context
+      description: Add any references, links, mockups, examples, or other relevant information.
+    validations:
+      required: false
+
