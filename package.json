@@ -15,6 +15,9 @@
     "format": "prettier --write --experimental-cli src/",
     "prepare": "husky"
   },
+  "lint-staged": {
+    "*.{js,ts,vue,json,css,scss,md}": "prettier --write"
+  },
   "dependencies": {
     "@phosphor-icons/vue": "^2.2.1",
     "@tailwindcss/vite": "^4.3.3",
@@ -35,6 +38,7 @@
     "eslint-plugin-vue": "~10.9.2",
     "husky": "^9.1.7",
     "jiti": "^2.7.0",
+    "lint-staged": "^17.4.1",
     "npm-run-all2": "^9.0.2",
     "oxlint": "~1.74.0",
     "prettier": "3.9.5",
