@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { PhTray } from '@phosphor-icons/vue';
-
+import { PhTray } from '@phosphor-icons/vue'
 </script>
 
 <template>
