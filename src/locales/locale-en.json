@@ -1,5 +1,13 @@
 {
   "app": {
     "title": "Trakt"
-  }
+  },
+  "nav": {
+    "front_page": "Front page",
+    "all": "All articles",
+    "today": "Today",
+    "read_later": "Read later",
+    "saved": "Saved"
+  },
+  "feeds": "Feeds"
 }

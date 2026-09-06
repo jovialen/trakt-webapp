@@ -1,4 +1,5 @@
 import './globals.css'
+import './clerk.css'
 
 import App from './App.vue'
 import router from './router'

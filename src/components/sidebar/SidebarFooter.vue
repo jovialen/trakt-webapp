@@ -1,7 +1,9 @@
 <script setup lang="ts"></script>
 
 <template>
-  <h2 class="metadata text-accent">Your one stop shop for all your news</h2>
+  <div class="mt-auto">
+    <slot />
+  </div>
 </template>
 
 <style scoped></style>

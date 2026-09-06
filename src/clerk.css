@@ -1,0 +1,25 @@
+:root {
+  --clerk-color-primary: light-dark(#211c16, #ffffff);
+  --clerk-color-primary-foreground: light-dark(#fcfaf3, black);
+  --clerk-color-danger: #ef4444;
+  --clerk-color-success: #22c543;
+  --clerk-color-warning: #f36b16;
+  --clerk-color-neutral: light-dark(#211c16, white);
+  --clerk-color-foreground: light-dark(#211c16, white);
+  --clerk-color-background: light-dark(#f6f2e9, #212126);
+  --clerk-color-input: light-dark(#fcfaf3, #26262b);
+  --clerk-color-input-foreground: light-dark(#000000, white);
+  --clerk-color-ring: light-dark(
+    color-mix(in srgb, #000000 15.000000000000002%, transparent),
+    color-mix(in srgb, #ffffff 15.000000000000002%, transparent)
+  );
+  --clerk-color-shimmer: #ffffff;
+  --clerk-color-modal-backdrop: #000000ba;
+  --clerk-border-radius: 0.375rem;
+  --clerk-spacing: 1rem;
+
+  --clerk-font-family: 'Public Sans', ui-sans-serif, system-ui, sans-serif;
+  --clerk-font-family-buttons: 'IBM Plex Mono', ui-monospace, monospace;
+  --clerk-font-family-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  --clerk-font-size: 0.875rem;
+}

@@ -1,7 +1,9 @@
 <script setup lang="ts"></script>
 
 <template>
-  <h2 class="metadata text-accent">Your one stop shop for all your news</h2>
+  <li>
+    <slot />
+  </li>
 </template>
 
 <style scoped></style>

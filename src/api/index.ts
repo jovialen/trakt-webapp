@@ -19,7 +19,19 @@ export const useApi = defineStore('api', () => {
 
   const getAuth = () => api.get('/auth')
 
+  const getFeeds = () => api.get('/feeds')
+
+  const getGroups = () => api.get('/groups')
+
+  const getFeedsByGroup = (group: number) => api.get(`/groups/${group}/feeds`)
+
   return {
     getAuth,
+
+    getFeeds,
+
+    getGroups,
+
+    getFeedsByGroup,
   }
 })
