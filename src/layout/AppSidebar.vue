@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { PhArrowClockwise, PhCaretDown, PhPlus, PhSquare, PhTray } from '@phosphor-icons/vue'
+import { PhArrowClockwise, PhCaretDown, PhPlus, PhSquare } from '@phosphor-icons/vue'
 import {
   Sidebar,
   SidebarContent,
@@ -16,6 +16,7 @@ import { useApi } from '../api'
 import { computed } from 'vue'
 import { IconButton, IconLinkButton, LinkButton } from '../components/button'
 import { UserButton } from '@clerk/vue'
+import Logo from '@/components/branding/Logo.vue'
 
 const SIDEBAR_ROUTES: { name: string; href: string }[] = [
   { name: 'front_page', href: '/' },
@@ -73,7 +74,7 @@ const refresh = () => {
 <template>
   <Sidebar>
     <SidebarHeader>
-      <PhTray :size="42" weight="fill" />
+      <Logo />
       <h1 class="text-2xl font-semibold">{{ $t('app.title') }}</h1>
     </SidebarHeader>
 
