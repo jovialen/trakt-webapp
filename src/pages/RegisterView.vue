@@ -8,7 +8,7 @@ const redirect = query.redirect?.toString() || redirectedFrom?.fullPath || '/'
 
 <template>
   <div class="flex items-center justify-center h-screen w-screen">
-    <SignUp :forceRedirectUrl="redirect" signInUrl="/login" />
+    <SignUp :forceRedirectUrl="redirect" />
   </div>
 </template>
 

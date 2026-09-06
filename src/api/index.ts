@@ -1,11 +1,25 @@
 import axios from 'axios'
+import { requestAuthTokenInjector } from './auth'
+import { defineStore } from 'pinia'
+import { useAuth } from '@clerk/vue'
 
-const api = axios.create({
-  headers: {
-    'Content-Type': 'application/json',
-  },
+const baseUrl = import.meta.env.VITE_API_BASE_URL
+
+export const useApi = defineStore('api', () => {
+  const { getToken } = useAuth()
+
+  const api = axios.create({
+    baseURL: baseUrl,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+
+  api.interceptors.request.use(requestAuthTokenInjector(getToken))
+
+  const getAuth = () => api.get('/auth')
+
+  return {
+    getAuth,
+  }
 })
-
-api.interceptors.request.use()
-
-export default api
