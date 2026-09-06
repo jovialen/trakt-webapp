@@ -22,7 +22,7 @@ const token = computed(() => response.value?.data)
 <template>
   <div class="flex">
     <PhTray :size="32" color="var(--heading)" weight="bold" />
-    <h1 class="text-3xl font-bold">Daily Mix</h1>
+    <h1 class="text-3xl font-bold">{{ $t('app.title') }}</h1>
   </div>
   <h2 class="metadata text-accent">Your one stop shop for all your news</h2>
   <SignOutButton class="hover:text-accent hover:cursor-pointer" />
