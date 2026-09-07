@@ -8,6 +8,9 @@ import SidebarHeader from './SidebarHeader.vue'
 import SidebarItem from './Sidebar.vue'
 import SidebarItemSkeleton from './SidebarItemSkeleton.vue'
 import SidebarLink from './SidebarLink.vue'
+import SidebarSubItem from './SidebarSubItem.vue'
+import SidebarSubItemSkeleton from './SidebarSubItemSkeleton.vue'
+import SidebarSubLink from './SidebarSubLink.vue'
 
 export {
   Sidebar,
@@ -20,4 +23,7 @@ export {
   SidebarItem,
   SidebarItemSkeleton,
   SidebarLink,
+  SidebarSubItem,
+  SidebarSubItemSkeleton,
+  SidebarSubLink,
 }

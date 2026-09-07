@@ -10,6 +10,7 @@ import {
   SidebarHeader,
   SidebarItemSkeleton,
   SidebarLink,
+  SidebarSubItemSkeleton,
 } from '../components/sidebar'
 import { useQuery } from '@pinia/colada'
 import { useApi } from '../api'
@@ -17,6 +18,7 @@ import { computed } from 'vue'
 import { IconButton, IconLinkButton, LinkButton } from '../components/button'
 import { UserButton } from '@clerk/vue'
 import Logo from '@/components/branding/Logo.vue'
+import SidebarSubLink from '@/components/sidebar/SidebarSubLink.vue'
 
 const SIDEBAR_ROUTES: { name: string; href: string }[] = [
   { name: 'front_page', href: '/' },
@@ -105,45 +107,43 @@ const refresh = () => {
         </SidebarGroupHeader>
 
         <!-- Skeleton items while we wait for the feeds to load -->
-        <SidebarGroupItem v-if="isLoadingFeeds" v-for="_ in 3">
+        <SidebarGroupItem v-if="isLoadingFeeds && isLoadingGroups" v-for="_ in 3">
           <SidebarItemSkeleton />
         </SidebarGroupItem>
 
         <!-- Actual feeds -->
-        <template v-else>
-          <template v-for="group in groupsWithFeeds">
-            <SidebarGroupItem>
-              <SidebarLink :to="`/groups/${group.id}`">
-                <span class="flex gap-2 items-center font-semibold">
-                  <PhCaretDown :size="8" weight="fill" /> {{ group.name }}
-                </span>
-                <span class="text-sm metadata leading-none">251</span>
-              </SidebarLink>
-            </SidebarGroupItem>
+        <template v-if="!isLoadingGroups" v-for="group in groupsWithFeeds">
+          <SidebarGroupItem>
+            <SidebarLink :to="`/groups/${group.id}`" class="text-heading">
+              <span class="flex gap-2 items-center font-semibold">
+                <PhCaretDown :size="8" weight="fill" /> {{ group.name }}
+              </span>
+              <span class="text-sm metadata leading-none">251</span>
+            </SidebarLink>
+          </SidebarGroupItem>
 
-            <SidebarGroupItem v-if="isLoadingFeeds" v-for="_ in 3">
-              <SidebarItemSkeleton />
-            </SidebarGroupItem>
+          <SidebarGroupItem v-if="isLoadingFeeds" v-for="_ in 3">
+            <SidebarSubItemSkeleton />
+          </SidebarGroupItem>
 
-            <SidebarGroupItem v-else v-for="feed in group.feeds">
-              <SidebarLink :to="`/feeds/${feed.id}`">
-                <span class="flex gap-2 items-center">
-                  <PhSquare :size="8" weight="regular" /> {{ feed.name }}
-                </span>
-                <span class="text-sm metadata leading-none">144</span>
-              </SidebarLink>
-            </SidebarGroupItem>
-          </template>
-
-          <SidebarGroupItem v-for="feed in ungroupedFeeds">
-            <SidebarLink :to="`/feeds/${feed.id}`">
+          <SidebarGroupItem v-else v-for="feed in group.feeds">
+            <SidebarSubLink :to="`/feeds/${feed.id}`">
               <span class="flex gap-2 items-center">
                 <PhSquare :size="8" weight="regular" /> {{ feed.name }}
               </span>
               <span class="text-sm metadata leading-none">144</span>
-            </SidebarLink>
+            </SidebarSubLink>
           </SidebarGroupItem>
         </template>
+
+        <SidebarGroupItem v-if="!isLoadingFeeds" v-for="feed in ungroupedFeeds">
+          <SidebarLink :to="`/feeds/${feed.id}`" class="text-heading">
+            <span class="flex gap-2 items-center">
+              <PhSquare :size="8" weight="regular" /> {{ feed.name }}
+            </span>
+            <span class="text-sm metadata leading-none">144</span>
+          </SidebarLink>
+        </SidebarGroupItem>
 
         <SidebarGroupItem>
           <LinkButton variant="ghost" to="/feeds/new">
