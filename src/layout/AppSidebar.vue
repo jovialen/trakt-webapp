@@ -14,19 +14,12 @@ import {
 } from '../components/sidebar'
 import { useQuery } from '@pinia/colada'
 import { useApi } from '../api'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { IconButton, IconLinkButton, LinkButton } from '../components/button'
 import { UserButton } from '@clerk/vue'
 import Logo from '@/components/branding/Logo.vue'
 import SidebarSubLink from '@/components/sidebar/SidebarSubLink.vue'
-
-const SIDEBAR_ROUTES: { name: string; href: string }[] = [
-  { name: 'front_page', href: '/' },
-  { name: 'all', href: '/all' },
-  { name: 'today', href: '/today' },
-  { name: 'read_later', href: '/read_later' },
-  { name: 'saved', href: '/saved' },
-]
+import type { Feed, Group } from '@/api/types'
 
 const api = useApi()
 
@@ -50,12 +43,12 @@ const {
   query: () => api.getFeeds(),
 })
 
-const feeds = computed<{ id: number; name: string; groups: number[] }[]>(
+const feeds = computed<Feed[]>(
   () => (feedsStatus.value === 'success' && feedsResponse.value?.data) || [],
 )
 const ungroupedFeeds = computed(() => feeds.value.filter((feed) => feed.groups.length === 0))
 
-const groups = computed<{ id: number; name: string }[]>(
+const groups = computed<Group[]>(
   () => (groupsStatus.value === 'success' && groupsResponse.value?.data) || [],
 )
 const groupsWithFeeds = computed(() =>
@@ -67,10 +60,30 @@ const groupsWithFeeds = computed(() =>
   }),
 )
 
-const refresh = () => {
-  refreshFeeds()
-  refreshGroups()
+const isRefreshing = ref(false)
+
+const refresh = async () => {
+  isRefreshing.value = true
+
+  await api.syncFeeds()
+
+  await refreshFeeds()
+  await refreshGroups()
+
+  isRefreshing.value = false
 }
+
+const SIDEBAR_ROUTES = computed<{ name: string; href: string; count?: number }[]>(() => [
+  { name: 'front_page', href: '/' },
+  { name: 'all', href: '/all', count: feeds.value.reduce((sum, feed) => sum + feed.unread, 0) },
+  {
+    name: 'today',
+    href: '/today',
+    count: Math.floor(feeds.value.reduce((sum, feed) => sum + feed.unread, 0) / 10),
+  },
+  { name: 'read_later', href: '/read_later', count: 7 },
+  { name: 'saved', href: '/saved', count: 15 },
+])
 </script>
 
 <template>
@@ -86,7 +99,9 @@ const refresh = () => {
           <SidebarGroupItem v-for="route in SIDEBAR_ROUTES">
             <SidebarLink :to="route.href">
               {{ $t(`nav.${route.name}`) }}
-              <span class="text-sm metadata leading-none">1.2k</span>
+              <span class="text-sm metadata leading-none" v-if="route.count">{{
+                route.count
+              }}</span>
             </SidebarLink>
           </SidebarGroupItem>
         </SidebarGroup>
@@ -97,8 +112,11 @@ const refresh = () => {
           <h2>{{ $t('feeds') }}</h2>
 
           <div class="flex">
-            <IconButton @click="refresh">
-              <PhArrowClockwise :size="16" :class="{ 'animate-spin': isLoadingFeeds }" />
+            <IconButton @click="refresh" :disabled="isRefreshing">
+              <PhArrowClockwise
+                :size="16"
+                :class="{ 'animate-spin': isRefreshing || isLoadingFeeds || isLoadingGroups }"
+              />
             </IconButton>
             <IconLinkButton to="/feeds/new">
               <PhPlus :size="16" />
@@ -118,7 +136,9 @@ const refresh = () => {
               <span class="flex gap-2 items-center font-semibold">
                 <PhCaretDown :size="8" weight="fill" /> {{ group.name }}
               </span>
-              <span class="text-sm metadata leading-none">251</span>
+              <span class="text-sm metadata leading-none">{{
+                group.feeds.reduce((sum, feed) => sum + feed.unread, 0)
+              }}</span>
             </SidebarLink>
           </SidebarGroupItem>
 
@@ -131,7 +151,7 @@ const refresh = () => {
               <span class="flex gap-2 items-center">
                 <PhSquare :size="8" weight="regular" /> {{ feed.name }}
               </span>
-              <span class="text-sm metadata leading-none">144</span>
+              <span class="text-sm metadata leading-none">{{ feed.unread }}</span>
             </SidebarSubLink>
           </SidebarGroupItem>
         </template>
@@ -141,7 +161,7 @@ const refresh = () => {
             <span class="flex gap-2 items-center">
               <PhSquare :size="8" weight="regular" /> {{ feed.name }}
             </span>
-            <span class="text-sm metadata leading-none">144</span>
+            <span class="text-sm metadata leading-none">{{ feed.unread }}</span>
           </SidebarLink>
         </SidebarGroupItem>
 

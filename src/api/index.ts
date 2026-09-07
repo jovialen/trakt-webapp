@@ -2,6 +2,7 @@ import axios from 'axios'
 import { requestAuthTokenInjector } from './auth'
 import { defineStore } from 'pinia'
 import { useAuth } from '@clerk/vue'
+import type { Article, Feed, Group } from './types'
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL
 
@@ -19,19 +20,40 @@ export const useApi = defineStore('api', () => {
 
   const getAuth = () => api.get('/auth')
 
-  const getFeeds = () => api.get('/feeds')
+  const syncFeeds = () => api.post('/feeds/sync')
 
-  const getGroups = () => api.get('/groups')
+  const getNewFeed = () => api.get<Feed>('/feeds/new')
+  const getFeeds = () => api.get<Feed[]>('/feeds')
+  const createFeed = (data: { name: string; link: string; groups: number[] }) =>
+    api.post<Feed>('/feeds', data)
 
-  const getFeedsByGroup = (group: number) => api.get(`/groups/${group}/feeds`)
+  const getNewGroup = () => api.get<Group>('/groups/new')
+  const getGroups = () => api.get<Group[]>('/groups')
+  const createGroup = (data: { name: string }) => api.post<Group>('/groups', data)
+
+  const getFeedsByGroup = (group: number) => api.get<Feed[]>(`/groups/${group}/feeds`)
+
+  const getArticles = () => api.get<Article[]>('/items')
+  const getArticlesByFeed = (feed: number) => api.get<Article[]>(`/feeds/${feed}/items`)
+  const getArticlesByGroup = (group: number) => api.get<Article[]>(`/groups/${group}/items`)
 
   return {
     getAuth,
 
-    getFeeds,
+    syncFeeds,
 
+    getNewFeed,
+    getFeeds,
+    createFeed,
+
+    getNewGroup,
     getGroups,
+    createGroup,
 
     getFeedsByGroup,
+
+    getArticles,
+    getArticlesByFeed,
+    getArticlesByGroup,
   }
 })
