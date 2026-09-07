@@ -1,37 +1,64 @@
 <script setup lang="ts">
-import { PhTray } from '@phosphor-icons/vue'
-import { SignOutButton } from '@clerk/vue'
-import { useQuery } from '@pinia/colada'
 import { useApi } from '@/api'
+import type { Feed } from '@/api/types'
+import { useQuery } from '@pinia/colada'
 import { computed } from 'vue'
 
 const api = useApi()
 
 const {
-  data: response,
-  isPending,
+  data: articleData,
   isLoading,
-  refresh,
+  status: articlesStatus,
 } = useQuery({
-  key: ['token'],
-  query: () => api.getAuth(),
+  key: ['articles'],
+  query: () => api.getArticles(),
 })
-const token = computed(() => response.value?.data)
+
+const { data: feedData, status: feedsStatus } = useQuery({
+  key: ['feeds'],
+  query: () => api.getFeeds(),
+})
+
+const feeds = computed(() => (feedsStatus.value === 'success' && feedData.value?.data) || [])
+const indexedFeeds = computed(() => {
+  const indexed: { [id: number]: Feed } = {}
+  for (let feed of feeds.value) {
+    indexed[feed.id] = feed
+  }
+  return indexed
+})
+const articles = computed(
+  () => (articlesStatus.value === 'success' && articleData.value?.data) || [],
+)
 </script>
 
 <template>
-  <div class="flex">
-    <PhTray :size="32" color="var(--heading)" weight="bold" />
-    <h1 class="text-3xl font-bold">{{ $t('app.title') }}</h1>
+  <div class="py-6 px-12 space-y-12">
+    <div>
+      <h1 class="font-display text-3xl text-heading font-semibold">Front page</h1>
+      <h2 class="metadata text-accent">Your one stop shop for all your news</h2>
+    </div>
+
+    <p v-if="isLoading">Loading...</p>
+    <ul class="grid grid-cols-4 gap-6" v-else>
+      <li v-for="article in articles">
+        <a :href="article.link" target="_blank">
+          <article class="bg-surface p-6 border border-border rounded-lg">
+            <span
+              v-if="indexedFeeds[article.feed_id] !== undefined"
+              class="uppercase metadata text-accent text-sm"
+            >
+              {{ indexedFeeds[article.feed_id].name }}
+            </span>
+
+            <h2 class="text-lg text-heading font-display font-semibold">{{ article.title }}</h2>
+            <p class="font-display">{{ article.summary }}</p>
+          </article>
+        </a>
+      </li>
+    </ul>
   </div>
-  <h2 class="metadata text-accent">Your one stop shop for all your news</h2>
-  <SignOutButton class="hover:text-accent hover:cursor-pointer" />
-  <p>
-    Token:
-    <span v-if="isPending || isLoading">Loading...</span>
-    <span v-else>{{ token }}</span>
-  </p>
-  <button @click="refresh()">Refetch</button>
 </template>
 
 <style scoped></style>

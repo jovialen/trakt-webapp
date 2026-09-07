@@ -10,7 +10,6 @@ export const routerAuthGuard: NavigationGuardWithThis<undefined> = async (
   to: RouteLocationNormalized,
   _from: RouteLocationNormalized,
 ): Promise<NavigationGuardReturn> => {
-  // const auth = useAuthStore()
   const auth = useAuth()
 
   // Wait until the auth loads
