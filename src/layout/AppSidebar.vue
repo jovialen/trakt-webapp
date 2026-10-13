@@ -20,6 +20,7 @@ import { UserButton } from '@clerk/vue'
 import Logo from '@/components/branding/Logo.vue'
 import SidebarSubLink from '@/components/sidebar/SidebarSubLink.vue'
 import type { Feed, Group } from '@/api/types'
+import { formatCount } from '@/utils/format'
 
 const api = useApi()
 
@@ -82,7 +83,7 @@ const SIDEBAR_ROUTES = computed<{ name: string; href: string; count?: number }[]
     count: Math.floor(feeds.value.reduce((sum, feed) => sum + feed.unread, 0) / 10),
   },
   { name: 'read_later', href: '/read_later', count: 7 },
-  { name: 'saved', href: '/saved', count: 15 },
+  { name: 'saved', href: '/saved', count: 1551 },
 ])
 </script>
 
@@ -100,7 +101,7 @@ const SIDEBAR_ROUTES = computed<{ name: string; href: string; count?: number }[]
             <SidebarLink :to="route.href">
               {{ $t(`nav.${route.name}`) }}
               <span class="text-sm metadata leading-none" v-if="route.count">{{
-                route.count
+                formatCount(route.count)
               }}</span>
             </SidebarLink>
           </SidebarGroupItem>
@@ -137,7 +138,7 @@ const SIDEBAR_ROUTES = computed<{ name: string; href: string; count?: number }[]
                 <PhCaretDown :size="8" weight="fill" /> {{ group.name }}
               </span>
               <span class="text-sm metadata leading-none">{{
-                group.feeds.reduce((sum, feed) => sum + feed.unread, 0)
+                formatCount(group.feeds.reduce((sum, feed) => sum + feed.unread, 0))
               }}</span>
             </SidebarLink>
           </SidebarGroupItem>
@@ -151,7 +152,7 @@ const SIDEBAR_ROUTES = computed<{ name: string; href: string; count?: number }[]
               <span class="flex gap-2 items-center">
                 <PhSquare :size="8" weight="regular" /> {{ feed.name }}
               </span>
-              <span class="text-sm metadata leading-none">{{ feed.unread }}</span>
+              <span class="text-sm metadata leading-none">{{ formatCount(feed.unread) }}</span>
             </SidebarSubLink>
           </SidebarGroupItem>
         </template>
@@ -161,7 +162,7 @@ const SIDEBAR_ROUTES = computed<{ name: string; href: string; count?: number }[]
             <span class="flex gap-2 items-center">
               <PhSquare :size="8" weight="regular" /> {{ feed.name }}
             </span>
-            <span class="text-sm metadata leading-none">{{ feed.unread }}</span>
+            <span class="text-sm metadata leading-none">{{ formatCount(feed.unread) }}</span>
           </SidebarLink>
         </SidebarGroupItem>
 
